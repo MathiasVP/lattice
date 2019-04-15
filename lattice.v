@@ -53,16 +53,13 @@ Import L.
 
 Local Open Scope equiv_scope.
 
-Lemma lat_eq_refl:
-  forall x : lattice, x === x.
+Lemma lat_eq_refl: forall x, x === x.
 Proof. eapply eq_equiv. Qed.
 
-Lemma lat_eq_sym:
-  forall x y : lattice, x === y -> y === x.
+Lemma lat_eq_sym: forall x y, x === y -> y === x.
 Proof. eapply eq_equiv. Qed.
 
-Lemma lat_eq_trans:
-  forall x y z : lattice, x === y -> y === z -> x === z.
+Lemma lat_eq_trans: forall x y z, x === y -> y === z -> x === z.
 Proof. eapply eq_equiv. Qed.
 
 Add Parametric Relation : lattice eq
@@ -97,7 +94,7 @@ Instance join_inst: Morphism2 join := { compat2 := join_compat }.
 Instance meet_inst: Morphism2 meet := { compat2 := meet_compat }.
 
 Lemma idem_join:
-    forall a : lattice,
+    forall a,
       join a a === a.
 Proof.
   intros.
