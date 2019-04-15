@@ -25,17 +25,17 @@ Notation "X '⊑' Y" := (X ⊔ Y === Y) (at level 70, no associativity).
 Notation "⊥" := bot.
 Notation "⊤" := top.
 
-Axiom meet_symmetry: forall a b   : lattice,  meet a b === meet b a.
-Axiom join_symmetry: forall a b   : lattice,  join a b === join b a.
-Axiom join_assoc   : forall a b c : lattice,  join a (join b c) === join (join a b) c.
-Axiom join_distrib : forall a b   : lattice,  join a (meet a b) === a.
-Axiom meet_assoc   : forall a b c : lattice,  meet a (meet b c) === meet (meet a b) c.
-Axiom meet_distrib : forall a b   : lattice,  meet a (join a b) === a.
+Axiom meet_symmetry: forall a b   : lattice,  a ⊓ b === b ⊓ a.
+Axiom join_symmetry: forall a b   : lattice,  a ⊔ b === b ⊔ a.
+Axiom join_assoc   : forall a b c : lattice,  a ⊔ (b ⊔ c) === (a ⊔ b) ⊔ c.
+Axiom join_distrib : forall a b   : lattice,  a ⊔ (a ⊓ b) === a.
+Axiom meet_assoc   : forall a b c : lattice,  a ⊓ (b ⊓ c) === (a ⊓ b) ⊓ c.
+Axiom meet_distrib : forall a b   : lattice,  a ⊓ (a ⊔ b) === a.
 Axiom eq_dec  : forall a b   : lattice,  { a === b} + { a =/= b }.
-Axiom join_bot: forall a     : lattice, join ⊥ a === a.
-Axiom join_top: forall a     : lattice, join ⊤ a === ⊤.
-Axiom meet_bot: forall a     : lattice, meet ⊥ a === ⊥.
-Axiom meet_top: forall a     : lattice, meet ⊤ a === a.
+Axiom join_bot: forall a     : lattice, ⊥ ⊔ a === a.
+Axiom join_top: forall a     : lattice, ⊤ ⊔ a === ⊤.
+Axiom meet_bot: forall a     : lattice, ⊥ ⊓ a === ⊥.
+Axiom meet_top: forall a     : lattice, ⊤ ⊓ a === a.
 
 Axiom join_compat: forall x1 y1 x2 y2, x1 === x2 -> y1 === y2 -> x1 ⊔ y1 === x2 ⊔ y2.
 Axiom meet_compat: forall x1 y1 x2 y2, x1 === x2 -> y1 === y2 -> x1 ⊓ y1 === x2 ⊓ y2.
@@ -479,7 +479,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
   Notation "X ⊔ Y" := (join X Y) (at level 40, left associativity).
   Notation "X ⊓ Y" := (meet X Y) (at level 40, left associativity).
   
-  Lemma join_compat: forall x1 y1 x2 y2 : lattice, x1 === x2 -> y1 === y2 -> x1 ⊔ y1 === x2 ⊔ y2.
+  Lemma join_compat: forall x1 y1 x2 y2, x1 === x2 -> y1 === y2 -> x1 ⊔ y1 === x2 ⊔ y2.
   Proof.
     intros [a1 b1] [a2 b2] [a3 b3] [a4 b4] [H1 H2] [H3 H4].
     unfold eq.
@@ -491,7 +491,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
   
-  Lemma meet_compat: forall x1 y1 x2 y2 : lattice, x1 === x2 -> y1 === y2 -> x1 ⊓ y1 === x2 ⊓ y2.
+  Lemma meet_compat: forall x1 y1 x2 y2, x1 === x2 -> y1 === y2 -> x1 ⊓ y1 === x2 ⊓ y2.
   Proof.
     intros [a1 b1] [a2 b2] [a3 b3] [a4 b4] [H1 H2] [H3 H4].
     unfold eq.
@@ -503,7 +503,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
   
-  Lemma meet_symmetry: forall a b : lattice, meet a b === meet b a.
+  Lemma meet_symmetry: forall a b, a ⊓ b === b ⊓ a.
   Proof.
     intros.
     unfold meet.
@@ -515,7 +515,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
 
-  Lemma join_symmetry: forall a b : lattice, join a b === join b a.
+  Lemma join_symmetry: forall a b, a ⊔ b === b ⊔ a.
   Proof.
     intros.
     unfold join.
@@ -527,7 +527,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
 
-  Lemma join_assoc: forall a b c : lattice, join a (join b c) === join (join a b) c.
+  Lemma join_assoc: forall a b c, a ⊔ (b ⊔ c) === (a ⊔ b) ⊔ c.
   Proof.
     intros.
     unfold join.
@@ -540,7 +540,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
 
-  Lemma meet_assoc: forall a b c : lattice, meet a (meet b c) === meet (meet a b) c.
+  Lemma meet_assoc: forall a b c, a ⊓ (b ⊓ c) === (a ⊓ b) ⊓ c.
   Proof.
     intros.
     unfold meet.
@@ -553,7 +553,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
 
-  Lemma meet_distrib: forall a b : lattice, meet a (join a b) === a.
+  Lemma meet_distrib: forall a b, a ⊓ (a ⊔ b) === a.
   Proof.
     intros.
     unfold meet, join.
@@ -566,7 +566,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
   Qed.
   Hint Resolve meet_distrib.
   
-  Lemma join_distrib: forall a b : lattice, join a (meet a b) === a.
+  Lemma join_distrib: forall a b, a ⊔ (a ⊓ b) === a.
   Proof.
     intros.
     unfold meet, join.
@@ -579,7 +579,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
   Qed.
   Hint Resolve join_distrib.
     
-  Lemma flowsto_compat_right: forall x y z : lattice, x === y -> z ⊑ y -> z ⊑ x.
+  Lemma flowsto_compat_right: forall x y z, x === y -> z ⊑ y -> z ⊑ x.
   Proof.
     intros [a1 b1] [a2 b2] [a3 b3] [H1 H2] [H3 H4].
     unfold eq.
@@ -591,7 +591,7 @@ Module ProductLattice (A B : Lattice) <: Lattice.
     split; reflexivity.
   Qed.
 
-  Lemma flowsto_compat_left: forall x y z : lattice, x === y -> y ⊑ z -> x ⊑ z.
+  Lemma flowsto_compat_left: forall x y z, x === y -> y ⊑ z -> x ⊑ z.
   Proof.
     intros [a1 b1] [a2 b2] [a3 b3] [H1 H2] [H3 H4].
     unfold eq.
@@ -634,13 +634,13 @@ Module ProductLattice (A B : Lattice) <: Lattice.
   Lemma join_is_pairwise:
     forall (a1 a2 : A.lattice)
       (b1 b2 : B.lattice),
-      join (a1, b1) (a2, b2) ===
+      (a1, b1) ⊔ (a2, b2) ===
       (A.join a1 a2, B.join b1 b2).
   Proof.
     reflexivity.
   Qed.
 
-Lemma eq_dec: forall a b : lattice, {a === b} + {a =/= b}.
+Lemma eq_dec: forall a b, {a === b} + {a =/= b}.
 Proof.
   intros.
   destruct a as [a1 b1].
@@ -667,9 +667,10 @@ Definition bot := (A.bot, B.bot).
 Definition top := (A.top, B.top).
 Hint Unfold bot top.
 
-Lemma join_bot:
-  forall a,
-    join bot a === a.
+Notation "⊥" := bot.
+Notation "⊤" := top.
+
+Lemma join_bot: forall a, ⊥ ⊔ a === a.
 Proof.
   intros.
   destruct a as [a b].
@@ -681,8 +682,7 @@ Proof.
 Qed.
 Hint Resolve join_bot.
 
-Lemma join_top:
-  forall a, join top a === top.
+Lemma join_top: forall a, ⊤ ⊔ a === ⊤.
 Proof.
   intros.
   destruct a as [a b].
@@ -693,9 +693,7 @@ Proof.
 Qed.
 Hint Resolve join_top.
 
-Lemma meet_bot:
-  forall a,
-    meet bot a === bot.
+Lemma meet_bot: forall a, ⊥ ⊓ a === ⊥.
 Proof.
   intros.
   destruct a as [a b].
@@ -707,8 +705,7 @@ Proof.
 Qed.
 Hint Resolve meet_bot.
 
-Lemma meet_top:
-  forall a, meet top a === a.
+Lemma meet_top: forall a, ⊤ ⊓ a === a.
 Proof.
   intros.
   destruct a as [a b].
@@ -730,9 +727,6 @@ Proof.
   eauto.
 Qed.
 Hint Resolve implies_flowsto.
-
-Notation "⊥" := bot.
-Notation "⊤" := top.
 
 End ProductLattice.
 
@@ -775,48 +769,48 @@ Definition join (a b : LH) :=
   | H => H
   end.
 
-Lemma meet_symmetry: forall a b : LH, meet a b = meet b a.
+Notation "X ⊔ Y" := (join X Y) (at level 20, left associativity).
+Notation "X ⊓ Y" := (meet X Y) (at level 40, left associativity).
+Notation "X ⊑ Y" := (X ⊔ Y = Y) (at level 70, no associativity).
+
+Lemma meet_symmetry: forall a b, a ⊓ b = b ⊓ a.
 Proof.
   intros.
   unfold meet.
   case a; case b; auto.
 Qed.
 
-Lemma join_symmetry :forall a b : LH, join a b = join b a.
+Lemma join_symmetry :forall a b : LH, a ⊔ b = b ⊔ a.
 Proof.
   intros; unfold join. case a; case b; auto.
 Qed.
 
-Lemma join_assoc: forall a b c :LH , join a (join b c) = join ( join a b) c.
+Lemma join_assoc: forall a b c, a ⊔ (b ⊔ c) = (a ⊔ b) ⊔ c.
 Proof.
   intros.
   unfold join.
   case a; case b; case c; auto.
 Qed.
 
-Lemma meet_assoc: forall a b c: LH, meet a (meet b c) = meet (meet a b) c.
+Lemma meet_assoc: forall a b c, a ⊓ (b ⊓ c) = (a ⊓ b) ⊓ c.
 Proof.
   intros.
   unfold join.
   case a; case b; case c; auto.
 Qed.
 
-Lemma meet_distrib: forall a b : LH, meet a (join a b) = a.
+Lemma meet_distrib: forall a b, a ⊓ (a ⊔ b) = a.
 Proof.
   intros; case a; case b; auto.
 Qed.
 
-Lemma join_distrib: forall a b : LH, join a (meet a b) = a.
+Lemma join_distrib: forall a b, a ⊔ (a ⊓ b) = a.
 Proof.
   intros; case a; case b; auto.
 Qed.
 
-Definition flowsto a b := join a b = b.
+Definition flowsto a b := a ⊔ b = b.
 Local Hint Unfold flowsto.
-  
-Notation "X ⊑ Y" := (flowsto X Y) (at level 70, no associativity).
-Notation "X ⊔ Y" := (join X Y) (at level 20, left associativity).
-Notation "X ⊓ Y" := (meet X Y) (at level 40, left associativity).
 
 Lemma eq_dec: forall a b : LH, {a = b } + {a <> b}.
 Proof.
@@ -827,23 +821,26 @@ Qed.
 Definition bot := L.
 Definition top := H.
 
+Notation "⊥" := bot.
+Notation "⊤" := top.
+
 Lemma join_bot:
-  forall a, join bot a = a.
+  forall a, ⊥ ⊔ a = a.
 Proof. reflexivity. Qed.
 Hint Resolve join_bot.
 
 Lemma join_top:
-  forall a, join top a = top.
+  forall a, ⊤ ⊔ a = ⊤.
 Proof. reflexivity. Qed.
 Hint Resolve join_top.
 
 Lemma meet_bot:
-  forall a, meet bot a = bot.
+  forall a, ⊥ ⊓ a = ⊥.
 Proof. reflexivity. Qed.
 Hint Resolve meet_bot.
 
 Lemma meet_top:
-  forall a, meet top a = a.
+  forall a, ⊤ ⊓ a = a.
 Proof. reflexivity. Qed.
 Hint Resolve meet_top.
 
@@ -862,8 +859,5 @@ Proof. congruence. Qed.
 
 Lemma flowsto_compat_left: forall x y z, x === y -> y ⊑ z -> x ⊑ z.
 Proof. congruence. Qed.
-
-Notation "⊥" := bot.
-Notation "⊤" := top.
 
 End LH.
