@@ -1,4 +1,4 @@
-Require Import Setoid.
+Require Import Setoid Coq.Classes.Morphisms Basics.
 
 Module Type Lattice.
 
@@ -74,20 +74,19 @@ Class Morphism2 (f : lattice -> lattice -> lattice) := {
 Class MorphismR (f : lattice -> lattice -> Prop) := {
   compatR: forall (x1 y1 x2 y2 : lattice), x1 === x2 -> y1 === y2 -> f x1 y1 <-> f x2 y2 }.
 
-Add Parametric Morphism {f : lattice -> lattice -> lattice} `{Morphism2 f}:
-  f with signature eq ==> eq ==> eq as eq_rewrite2.
+Instance eq_rewrite2_Proper {f : lattice -> lattice -> lattice} `{Morphism2 f} : Proper (eq ==> eq ==> eq) f.
 Proof.
-  intros.
-  eapply compat2; eauto.
+  intros x1 y1 H_eq1 x2 y2 H_eq2.
+  eapply compat2; eassumption.
 Qed.
 
-Add Parametric Morphism {f : lattice -> lattice -> Prop} `{MorphismR f}:
-  f with signature eq ==> eq ==> Basics.flip Basics.impl as eq_rewrite3.
+Instance eq_rewrite3_Proper {f : lattice -> lattice -> Prop} `{MorphismR f}:
+  Proper (eq ==> eq ==> flip impl) f.
 Proof.
-  intros.
-  unfold Basics.impl.
-  intros.
-  eapply compatR; eauto.
+  intros x1 y1 H_eq1 x2 y2 H_eq2.
+  unfold flip.
+  intro.
+  eapply compatR; eassumption.
 Qed.
   
 Instance join_inst: Morphism2 join := { compat2 := join_compat }.
@@ -247,14 +246,9 @@ Hint Resolve flowsto_meet.
 Class MorphismUR (f : lattice -> Prop) := {
   compatUR: forall (x y : lattice), x === y -> f y <-> f x }.
 
-Add Parametric Morphism {f : lattice -> Prop} `{MorphismUR f}:
-  f with signature eq ==> Basics.flip Basics.impl as eq_rewrite4.
+Instance eq_rewrite4_Proper {f : lattice -> Prop} `{MorphismUR f}: Proper (eq ==> flip impl) f.
 Proof.
-  intros.
-  unfold Basics.impl.
-  intros.
-  symmetry in H0.
-  eapply (compatUR y x); assumption.
+  firstorder.
 Qed.
 
 Instance flowsto_inst : MorphismR (fun a b => a ⊔ b === b).
